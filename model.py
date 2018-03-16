@@ -1,5 +1,6 @@
 import tensorflow as tf
-
+import numpy as np
+import os
 class CNNBuilder():
     def __init__(self,num_classes=3,channels=1):
         self.num_classes = num_classes
@@ -48,3 +49,30 @@ class CNNBuilder():
 
         py_x = tf.matmul(l4, w5)
         return py_x, p_keep_hidden, p_keep_conv, X, Y
+    def load_model(self):
+
+        self.py_x, self.p_keep_hidden, self.p_keep_con, self.cnn_x, _ = self.model_CNN() 
+        self.soft_op = tf.nn.softmax(self.py_x)
+        with tf.Session() as sess:
+            self.session = sess
+        if os.path.exists("models/face_CNN"):
+            tf.train.Saver().restore(self.session, 'models/face_CNN')
+    def classify(self,image):
+        
+        data_pre = image.reshape([1, 100, 100, 1])
+        init_op = tf.global_variables_initializer()
+        # tf.initialize_all_variables().run()
+        # init_op = tf.initialize_all_variables()
+        self.session.run(init_op)
+        """ ---------- Get the accuracy data from input image data to model ------------ """
+        soft_data_pre = self.session.run(self.soft_op,
+                                      feed_dict={self.cnn_x: data_pre, self.p_keep_con: 1, self.p_keep_hidden: 1})
+        results = np.squeeze(soft_data_pre)
+        print soft_data_pre
+        r = tf.argmax(soft_data_pre,1)
+        r = self.session.run(r)
+        
+        
+        labels = ["madhan","sachin","sanath"]
+        
+        return labels[r[0]] , results[r[0]]*100
