@@ -1,11 +1,14 @@
 
-import tensorflow as tf
-import numpy as np
-import cv2
-import sys
-import data_utils
 import logging
+import sys
+
+import numpy as np
+import tensorflow as tf
+
+import cv2
+import data_utils
 from model import CNNBuilder
+
 
 def load_training_data_CNN(train_path, y_val):
     """
@@ -27,9 +30,9 @@ def load_training_data_CNN(train_path, y_val):
         if image_data is not None:
             training_data = image_data.reshape(100, 100, 1)
             train_data_x.append(training_data)
-            train_data_y.append(data_utils.expand(y_val, 5))
-
-    print("\n  Total count of training data : " + str(len(train_data_x)))
+            train_data_y.append(data_utils.expand(y_val, 3))
+            
+    print("\n  Total count of training data : %d" % len(train_data_x))
 
     return train_data_x, train_data_y
 
@@ -61,12 +64,12 @@ if __name__ == "__main__":
                         )
 
     data_utils.log_print(logging, "Loading training data ...")
-    [train_x1, train_y1] = [] , []
+    [train_x1, train_y1] = load_training_data_CNN('/home/madhan/Documents/skalenow/face_reco/train_faces/madhan', 0)
     [train_x2, train_y2] = [] , []
     # [train_x1, train_y1] = load_training_data_CNN('train_faces/0', 0)
     # [train_x2, train_y2] = load_training_data_CNN('train_faces/1', 1)
-    [train_x3, train_y3] = load_training_data_CNN('train_faces/1', 2)
-    [train_x4, train_y4] = load_training_data_CNN('train_faces/2', 3)
+    [train_x3, train_y3] = load_training_data_CNN('/home/madhan/Documents/skalenow/face_reco/train_faces/sachin', 1)
+    [train_x4, train_y4] = load_training_data_CNN('/home/madhan/Documents/skalenow/face_reco/train_faces/sanath', 2)
     # [train_x2, train_y2] = load_training_data_CNN('training_face_rec', 1)
 
     """ --------------------- Configuration of CNN model ------------------------ """
@@ -125,4 +128,4 @@ if __name__ == "__main__":
             sys.stdout.write('\r  %s: %d' % ("step", step_i))
             sys.stdout.flush()
 
-    print("Optimization Finished!")
+    print("Training Finished!")

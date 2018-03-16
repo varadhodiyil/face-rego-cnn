@@ -15,7 +15,7 @@ def get_file_list(root_dir):
 
     return path_list, file_list, join_list
 
-def expand(self, number, width):
+def expand(number, width):
     s = np.zeros(width)
     s[number] = 1
     return s
