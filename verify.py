@@ -12,12 +12,7 @@ _cnn.load_model()
 while cap.isOpened():
 
     ret, image = cap.read()
-    if ret:
-        # print image.scn
-        pass
-        # image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    else:
-        continue
+    
 
     img_face, pos_face = open_cv_helper.convert_img(image)
 
